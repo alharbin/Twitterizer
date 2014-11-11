@@ -388,26 +388,26 @@ namespace Twitterizer.Core
         {
             RateLimiting rateLimiting = new RateLimiting();
 
-            if (responseHeaders.AllKeys.Any(x => x.Equals("X-RateLimit-Limit", StringComparison.InvariantCultureIgnoreCase)))
+            if (responseHeaders.AllKeys.Any(x => x.Equals(/*"X-RateLimit-Limit"*/"x-rate-limit-limit", StringComparison.InvariantCultureIgnoreCase)))
             {
-                rateLimiting.Total = int.Parse(responseHeaders["X-RateLimit-Limit"], CultureInfo.InvariantCulture);
+                rateLimiting.Total = int.Parse(responseHeaders["x-rate-limit-limit"], CultureInfo.InvariantCulture);
             }
 
-            if (responseHeaders.AllKeys.Any(x => x.Equals("X-RateLimit-Remaining", StringComparison.InvariantCultureIgnoreCase)))
+            if (responseHeaders.AllKeys.Any(x => x.Equals(/*"X-RateLimit-Remaining"*/ "x-rate-limit-remaining", StringComparison.InvariantCultureIgnoreCase)))
             {
-                rateLimiting.Remaining = int.Parse(responseHeaders["X-RateLimit-Remaining"], CultureInfo.InvariantCulture);
+                rateLimiting.Remaining = int.Parse(responseHeaders["x-rate-limit-remaining"], CultureInfo.InvariantCulture);
             }
 
-            if (!string.IsNullOrEmpty(responseHeaders["X-RateLimit-Reset"]))
+            if (!string.IsNullOrEmpty(responseHeaders["x-rate-limit-reset"/*"X-RateLimit-Reset"*/]))
             {
                 rateLimiting.ResetDate = DateTime.SpecifyKind(new DateTime(1970, 1, 1, 0, 0, 0, 0)
-                    .AddSeconds(double.Parse(responseHeaders["X-RateLimit-Reset"], CultureInfo.InvariantCulture)), DateTimeKind.Utc);
+                    .AddSeconds(double.Parse(responseHeaders["x-rate-limit-reset"], CultureInfo.InvariantCulture)), DateTimeKind.Utc);
             }
-            else if(!string.IsNullOrEmpty(responseHeaders["Retry-After"]))
+            else if (!string.IsNullOrEmpty(responseHeaders["Retry-After"]))
             {
                 rateLimiting.ResetDate = DateTime.UtcNow.AddSeconds(Convert.ToInt32(responseHeaders["Retry-After"]));
             }
-            
+
             return rateLimiting;
         }
 
@@ -418,9 +418,9 @@ namespace Twitterizer.Core
         /// <returns>An enum of the current access level of the OAuth Token being used.</returns>
         private AccessLevel ParseAccessLevel(WebHeaderCollection responseHeaders)
         {
-            if (responseHeaders.AllKeys.Contains("X-Access-Level"))
+            if (responseHeaders.AllKeys.Contains("x-access-level" /*"X-Access-Level"*/))
             {
-                switch (responseHeaders["X-Access-Level"].ToLower())
+                switch (responseHeaders["x-access-level"].ToLower())
                 {
                     case "read":
                         return AccessLevel.Read;

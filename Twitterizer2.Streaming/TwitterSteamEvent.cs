@@ -102,6 +102,18 @@ namespace Twitterizer.Streaming
         /// The source users profile was updated.
         /// </summary>
         [EnumMemberAttribute(Value = "access_revoked")]
-        AccessRevoked
+        AccessRevoked,
+
+        /// <summary>
+        /// The source user has blocked the target user.
+        /// </summary>
+        [EnumMemberAttribute(Value = "mute")]
+        Mute,
+
+        /// <summary>
+        /// The source user has unblocked the target user.
+        /// </summary>
+        [EnumMemberAttribute(Value = "unmute")]
+        Unmute
     }
 }
